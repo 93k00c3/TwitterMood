@@ -1,18 +1,9 @@
-import csv
+import pandas as pd
 import re
-from textblob import TextBlob
 
+df = pd.read_csv('./archive/NFT.csv')
 
-class Tweet:
-    def __init__(self, full_text):
-        self.full_text = full_text
-
-
-with open('./archive/trumptweets.csv', 'r') as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        tweet_text = row['content']
-        tweet_text_without_links = re.sub(r'http\S+', '', tweet_text)
-        tweet = Tweet(tweet_text_without_links)
-        analysis = TextBlob(tweet.full_text)
-        print(analysis.sentiment)
+tweets = df['tweets'].apply(lambda x: re.sub(r'(@\w+)|(#\w+)|(http\S+|www\S+)|[^a-zA-Z0-9\s]', '', x.lower()))
+# Remove extra spaces
+for tweet in tweets:
+    print(tweet)
