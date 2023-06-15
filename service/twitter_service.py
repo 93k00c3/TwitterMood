@@ -1,4 +1,5 @@
 import nltk
+from textblob import TextBlob
 from nltk.corpus import stopwords
 import pandas as pd
 import re
@@ -22,3 +23,13 @@ def preprocess_tweet(Tweet):
     filtered_tweet = ' '.join(filtered_tokens)
     return filtered_tweet
 
+
+def analyze_sentiment(Tweet):
+    blob = TextBlob(Tweet)
+    sentiment = blob.sentiment.polarity
+    if sentiment > 0:
+        return 'Positive'
+    elif sentiment < 0:
+        return 'Negative'
+    else:
+        return 'Neutral'

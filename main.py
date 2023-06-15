@@ -1,9 +1,15 @@
-import pandas as pd
-import re
+from service.twitter_service import *
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
-df = pd.read_csv('./archive/NFT.csv')
 
-tweets = df['tweets'].apply(lambda x: re.sub(r'(@\w+)|(#\w+)|(http\S+|www\S+)|[^a-zA-Z0-9\s]', '', x.lower()))
-# Remove extra spaces
-for tweet in tweets:
-    print(tweet)
+filtered_tweets = filter_tweets('./archive/worldcuptweets.csv')
+filtered_tweets = filtered_tweets[filtered_tweets != '']
+all_tweets = ' '.join(filtered_tweets)
+
+wordcloud = WordCloud(width=800, height=400, background_color='white').generate(all_tweets)
+
+plt.figure(figsize=(10, 5))
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.show()
