@@ -1,6 +1,7 @@
 import nltk
 from textblob import TextBlob
 from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 import pandas as pd
 import re
 import langid
@@ -17,9 +18,10 @@ def filter_tweets(csv_file):
 def preprocess_tweet(Tweet):
     nltk.download('stopwords')
     stop_words = set(stopwords.words('english'))
-    Tweet = re.sub(r'[^a-zA-Z\s]', '', Tweet)  # Remove special characters
+    lemmatizer = WordNetLemmatizer()
+    Tweet = re.sub(r'[^a-zA-Z\s]', '', Tweet)
     tweet_tokens = nltk.word_tokenize(Tweet)
-    filtered_tokens = [word for word in tweet_tokens if word.lower() not in stop_words]  # Remove stopwords
+    filtered_tokens = [lemmatizer.lemmatize(word) for word in tweet_tokens if word.lower() not in stop_words]
     filtered_tweet = ' '.join(filtered_tokens)
     return filtered_tweet
 
